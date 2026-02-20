@@ -22,8 +22,9 @@ public class ClienteServiceImpl implements ClienteService{
     }
 
     @Override
-    public Optional<Cliente> buscarPorId(Long id) {
-        return clienteRepository.findById(id);
+    public Cliente buscarPorId(Long id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
     }
 
     @Override
@@ -33,13 +34,14 @@ public class ClienteServiceImpl implements ClienteService{
 
     @Override
     public Cliente actualizar(Long id, Cliente cliente) {
-        return clienteRepository.findById(id)
-                .map(c -> {
-                    c.setNombre(cliente.getNombre());
-                    c.setTelefono(cliente.getTelefono());
-                    return clienteRepository.save(c);
-                })
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        Cliente cl = buscarPorId(id);
+
+        cl.setNombre(cliente.getNombre());
+        cl.setApellidos(cliente.getApellidos());
+        cl.setCorreo(cliente.getCorreo());
+        cl.setTelefono(cliente.getTelefono());
+
+        return clienteRepository.save(cliente);
     }
 
     @Override
@@ -47,4 +49,4 @@ public class ClienteServiceImpl implements ClienteService{
         clienteRepository.deleteById(id);
     }
 
-}
+    }
