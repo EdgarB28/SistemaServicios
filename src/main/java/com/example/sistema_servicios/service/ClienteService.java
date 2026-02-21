@@ -1,17 +1,19 @@
 package com.example.sistema_servicios.service;
+import com.example.sistema_servicios.dto.ClienteRequestDTO;
+import com.example.sistema_servicios.dto.ClienteResponseDTO;
 import com.example.sistema_servicios.entity.Cliente;
 
 import java.util.List;
 import java.util.Optional;
 public interface ClienteService {
 
-    List<Cliente> listarTodos();
+    List<ClienteResponseDTO> listarTodos();
 
-    public Cliente buscarPorId(Long id);
+    ClienteResponseDTO buscarPorId(Long id);
 
-    Cliente guardar(Cliente cliente);
+    ClienteResponseDTO guardar(ClienteRequestDTO request);
 
-    Cliente actualizar(Long id, Cliente cliente);
+    ClienteResponseDTO actualizar(Long id, ClienteRequestDTO request);
 
     void eliminar(Long id);
 }

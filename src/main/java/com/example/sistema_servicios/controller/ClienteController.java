@@ -1,9 +1,10 @@
 package com.example.sistema_servicios.controller;
 
 
-import com.example.sistema_servicios.entity.Cliente;
+import com.example.sistema_servicios.dto.ClienteRequestDTO;
+import com.example.sistema_servicios.dto.ClienteResponseDTO;
 import com.example.sistema_servicios.service.ClienteService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,29 +12,37 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
-    @Autowired
-    private ClienteService clienteService;
+    private final ClienteService clienteService;
+
+    public ClienteController(ClienteService clienteService) {
+        this.clienteService = clienteService;
+    }
 
     @GetMapping
-    public List<Cliente> listar() {
+    public List<ClienteResponseDTO> listar() {
         return clienteService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public Cliente buscar(@PathVariable Long id) {
+    public ClienteResponseDTO buscar(@PathVariable Long id) {
         return clienteService.buscarPorId(id);
     }
 
+    @PostMapping
+    public ClienteResponseDTO crear(
+            @Valid @RequestBody ClienteRequestDTO request) {
+        return clienteService.guardar(request);
+    }
+
     @PutMapping("/{id}")
-    public Cliente actualizar(@PathVariable Long id,
-                              @RequestBody Cliente cliente) {
-        return clienteService.actualizar(id, cliente);
+    public ClienteResponseDTO actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody ClienteRequestDTO request) {
+        return clienteService.actualizar(id, request);
     }
 
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
         clienteService.eliminar(id);
     }
-
-
 }
