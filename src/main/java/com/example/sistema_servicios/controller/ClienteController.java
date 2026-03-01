@@ -6,8 +6,8 @@ import com.example.sistema_servicios.dto.ClienteResponseDTO;
 import com.example.sistema_servicios.service.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -19,8 +19,8 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<ClienteResponseDTO> listar() {
-        return clienteService.listarTodos();
+    public Page<ClienteResponseDTO> listar(Pageable pageable) {
+        return clienteService.listarPaginado(pageable);
     }
 
     @GetMapping("/{id}")
