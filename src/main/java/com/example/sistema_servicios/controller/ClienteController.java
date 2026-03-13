@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/api/clientes")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ClienteController {
     private final ClienteService clienteService;
 
