@@ -17,3 +17,21 @@ export const crearCliente = async (cliente) => {
 
   return await response.json();
 };
+
+export const eliminarCliente = async (id) => {
+  await fetch(`http://localhost:8080/api/clientes/${id}`, {
+    method: "DELETE",
+  });
+};
+
+export const actualizarCliente = async (id, cliente) => {
+  const response = await fetch(`http://localhost:8080/api/clientes/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(cliente),
+  });
+
+  return await response.json();
+};

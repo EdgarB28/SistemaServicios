@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { listarClientes, crearCliente } from "../services/clienteService";
-
+import { listarClientes, crearCliente, eliminarCliente, actualizarCliente } from "../services/clienteService";
 function Clientes() {
 
   const [clientes, setClientes] = useState([]);
 
-  useEffect( () => {
-     cargarClientes();
+  useEffect(() => {
+    cargarClientes();
   }, []);
 
   const cargarClientes = async () => {
@@ -32,17 +31,46 @@ function Clientes() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await crearCliente(form);
+    try {
+      if (editandoId) {
+        await actualizarCliente(editandoId, form);
+      } else {
+        await crearCliente(form);
+      }
 
-    cargarClientes(); // refrescar tabla
+      await cargarClientes();
 
+      setForm({
+        nombre: "",
+        apellidos: "",
+        nroDocumento: "",
+        correo: "",
+        telefono: "",
+      });
+
+      setEditandoId(null);
+
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
+
+
+  const handleEliminar = async (id) => {
+    await eliminarCliente(id);
+    await cargarClientes();
+  };
+
+  const handleEditar = (cliente) => {
     setForm({
-      nombre: "",
-      apellidos: "",
-      nroDocumento: "",
-      correo: "",
-      telefono: "",
+      nombre: cliente.nombreCompleto.split(" ")[0],
+      apellidos: cliente.nombreCompleto.split(" ").slice(1).join(" "),
+      nroDocumento: cliente.nroDocumento,
+      correo: cliente.correo,
+      telefono: cliente.telefono,
     });
+
+    setEditandoId(cliente.id);
   };
 
   return (
@@ -56,6 +84,7 @@ function Clientes() {
             <th>Nombre</th>
             <th>Documento</th>
             <th>Correo</th>
+            <th>Acciones</th>
           </tr>
         </thead>
 
@@ -66,6 +95,15 @@ function Clientes() {
               <td>{cliente.nombreCompleto}</td>
               <td>{cliente.nroDocumento}</td>
               <td>{cliente.correo}</td>
+              <td>
+                <button onClick={() => handleEliminar(cliente.id)}>
+                  Eliminar
+                </button>
+
+                <button onClick={() => handleEditar(cliente)}>
+                  Editar
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
