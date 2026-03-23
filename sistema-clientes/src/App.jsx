@@ -1,12 +1,7 @@
-import Clientes from "./components/Clientes";
+import Layout from "./components/Layout";
 
 function App() {
-  return (
-    <div>
-      <h1>Sistema de Clientes</h1>
-      <Clientes />
-    </div>
-  );
+  return <Layout />;
 }
 
 export default App;
