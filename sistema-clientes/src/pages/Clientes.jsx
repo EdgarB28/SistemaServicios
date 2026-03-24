@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { listarClientes, crearCliente, eliminarCliente, actualizarCliente } from "../services/clienteService";
+import ClienteTable from "../components/ClienteTable";
+
 function Clientes() {
 
   const [clientes, setClientes] = useState([]);
@@ -77,38 +79,11 @@ function Clientes() {
     <div>
       <h2>Lista de Clientes</h2>
 
-      <table border="1">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Documento</th>
-            <th>Correo</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {clientes.map(cliente => (
-            <tr key={cliente.id}>
-              <td>{cliente.id}</td>
-              <td>{cliente.nombreCompleto}</td>
-              <td>{cliente.nroDocumento}</td>
-              <td>{cliente.correo}</td>
-              <td>
-                <button onClick={() => handleEliminar(cliente.id)}>
-                  Eliminar
-                </button>
-
-                <button onClick={() => handleEditar(cliente)}>
-                  Editar
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-
-      </table>
+      <ClienteTable
+        clientes={clientes}  //datos
+        onEliminar={handleEliminar} //funcion
+        onEditar={handleEditar} //funcion
+      />
 
 
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import Clientes from "./Clientes";
+import Clientes from "../pages/Clientes";
+import Bienvenido from "../pages/Bienvenido";
 import "../styles/sidebar.css";
 
 function Layout() {
@@ -8,9 +9,9 @@ function Layout() {
     const renderVista = () => {
         switch (vista) {
             case "inicio":
-                return <h2>Bienvenido 👋</h2>;
+                return <Bienvenido/>;
             case "clientes":
-                return <Clientes />;
+                return <Clientes/>;
             case "productos":
                 return <h2>Productos (en construcción)</h2>;
             case "ventas":
@@ -43,7 +44,7 @@ function Layout() {
                 >
                     Clientes
                 </button>
-                <br /><br />
+                <br /><br /> 
 
                 <button className="sidebar-button" onClick={() => setVista("productos")}>Productos</button>
                 <br /><br />
