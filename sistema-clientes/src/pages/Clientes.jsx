@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { listarClientes, crearCliente, eliminarCliente, actualizarCliente } from "../services/clienteService";
 import ClienteTable from "../components/ClienteTable";
+import Modal from "../components/modal";
 
 function Clientes() {
 
   const [clientes, setClientes] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [editandoId, setEditandoId] = useState(null);
 
   useEffect(() => {
     cargarClientes();
@@ -73,11 +76,19 @@ function Clientes() {
     });
 
     setEditandoId(cliente.id);
+    setShowModal(true);
   };
 
   return (
     <div>
       <h2>Lista de Clientes</h2>
+
+      <button
+        className="btn btn-primary mb-3"
+        onClick={() => setShowModal(true)}
+      >
+        Crear Cliente
+      </button>
 
       <ClienteTable
         clientes={clientes}  //datos
@@ -85,20 +96,27 @@ function Clientes() {
         onEditar={handleEditar} //funcion
       />
 
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        title="Registrar Cliente"
+      >
+        <form onSubmit={handleSubmit}>
+          <input className="form-control mb-2" name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleChange} />
+          <input className="form-control mb-2" name="apellidos" placeholder="Apellidos" value={form.apellidos} onChange={handleChange} />
+          <input className="form-control mb-2" name="nroDocumento" placeholder="Documento" value={form.nroDocumento} onChange={handleChange} />
+          <input className="form-control mb-2" name="correo" placeholder="Correo" value={form.correo} onChange={handleChange} />
+          <input className="form-control mb-2" name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleChange} />
 
-
-      <h2>Registrar Cliente</h2>
-
-      <form onSubmit={handleSubmit}>
-        <input name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleChange} />
-        <input name="apellidos" placeholder="Apellidos" value={form.apellidos} onChange={handleChange} />
-        <input name="nroDocumento" placeholder="Documento" value={form.nroDocumento} onChange={handleChange} />
-        <input name="correo" placeholder="Correo" value={form.correo} onChange={handleChange} />
-        <input name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleChange} />
-
-        <button type="submit">Guardar</button>
-      </form>
+          <button className="btn btn-success" type="submit">
+            Guardar
+          </button>
+        </form>
+      </Modal>
     </div>
+
+
+
   );
 }
 
