@@ -8,6 +8,7 @@ function Clientes() {
   const [clientes, setClientes] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editandoId, setEditandoId] = useState(null);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     cargarClientes();
@@ -79,11 +80,42 @@ function Clientes() {
     setShowModal(true);
   };
 
+  const validar = () => {
+    let nuevosErrores = {};
+
+    if (!form.nombre.trim()) {
+      nuevosErrores.nombre = "El nombre es obligatorio";
+    }
+
+    if (!form.apellidos.trim()) {
+      nuevosErrores.apellidos = "Los apellidos son obligatorios";
+    }
+
+    if (!form.nroDocumento.trim()) {
+      nuevosErrores.nroDocumento = "El documento es obligatorio";
+    }
+
+    if (!form.correo.trim()) {
+      nuevosErrores.correo = "El correo es obligatorio";
+    } else if (!/\S+@\S+\.\S+/.test(form.correo)) {
+      nuevosErrores.correo = "Correo inválido";
+    }
+
+    if (!form.telefono.trim()) {
+      nuevosErrores.telefono = "El teléfono es obligatorio";
+    }
+
+    setErrors(nuevosErrores);
+
+    return Object.keys(nuevosErrores).length === 0;
+  };
+
   return (
     <div>
       <h2>Lista de Clientes</h2>
 
       <button
+        type="button"
         className="btn btn-primary mb-3"
         onClick={() => setShowModal(true)}
       >
@@ -102,11 +134,46 @@ function Clientes() {
         title="Registrar Cliente"
       >
         <form onSubmit={handleSubmit}>
-          <input className="form-control mb-2" name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleChange} />
-          <input className="form-control mb-2" name="apellidos" placeholder="Apellidos" value={form.apellidos} onChange={handleChange} />
-          <input className="form-control mb-2" name="nroDocumento" placeholder="Documento" value={form.nroDocumento} onChange={handleChange} />
-          <input className="form-control mb-2" name="correo" placeholder="Correo" value={form.correo} onChange={handleChange} />
-          <input className="form-control mb-2" name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleChange} />
+          <input
+            className={`form-control mb-1 ${errors.nombre ? "is-invalid" : ""}`}
+            name="nombre"
+            placeholder="Nombre"
+            value={form.nombre}
+            onChange={handleChange}
+          />
+          {errors.nombre && (
+            <div className="invalid-feedback">
+              {errors.nombre}
+            </div>
+          )}
+          <input className={`form-control mb-1 ${errors.apellidos ? "is-invalid" : ""}`}
+            name="apellidos" placeholder="Apellidos" value={form.apellidos} onChange={handleChange} />
+          {errors.apellidos && (
+            <div className="invalid-feedback">
+              {errors.apellidos}
+            </div>
+          )}
+          <input className={`form-control mb-1 ${errors.nroDocumento ? "is-invalid" : ""}`}
+            name="nroDocumento" placeholder="Documento" value={form.nroDocumento} onChange={handleChange} />
+          {errors.nroDocumento && (
+            <div className="invalid-feedback">
+              {errors.nroDocumento}
+            </div>
+          )}
+          <input className={`form-control mb-1 ${errors.correo ? "is-invalid" : ""}`}
+            name="correo" placeholder="Correo" value={form.correo} onChange={handleChange} />
+          {errors.correo && (
+            <div className="invalid-feedback">
+              {errors.correo}
+            </div>
+          )}
+          <input className={`form-control mb-1 ${errors.telefono ? "is-invalid" : ""}`}
+            name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleChange} />
+          {errors.telefono && (
+            <div className="invalid-feedback">
+              {errors.telefono}
+            </div>
+          )}
 
           <button className="btn btn-success" type="submit">
             Guardar
