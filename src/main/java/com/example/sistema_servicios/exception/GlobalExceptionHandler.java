@@ -20,6 +20,11 @@ public class GlobalExceptionHandler {
         return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<?> handleConflict(ConflictException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
     private ResponseEntity<?> buildResponse(String message, HttpStatus status) {
         Map<String, Object> error = new HashMap<>();
         error.put("timestamp", LocalDateTime.now());

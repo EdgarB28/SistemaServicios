@@ -3,13 +3,13 @@ package com.example.sistema_servicios.service;
 import com.example.sistema_servicios.dto.ClienteRequestDTO;
 import com.example.sistema_servicios.dto.ClienteResponseDTO;
 import com.example.sistema_servicios.entity.Cliente;
+import com.example.sistema_servicios.exception.ConflictException;
 import com.example.sistema_servicios.exception.ResourceNotFoundException;
 import com.example.sistema_servicios.repository.ClienteRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 
 @Service
@@ -31,7 +31,7 @@ public class ClienteServiceImpl implements ClienteService{
     @Override
     public ClienteResponseDTO guardar(ClienteRequestDTO request) {
         if (clienteRepository.existsByNroDocumento(request.getNroDocumento())) {
-            throw new ResourceNotFoundException("El documento ya existe");
+            throw new ConflictException("El documento ya existe");
         }
 
         Cliente cliente = mapToEntity(request);

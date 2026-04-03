@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { listarClientes, crearCliente, eliminarCliente, actualizarCliente } from "../services/clienteService";
 import ClienteTable from "../components/ClienteTable";
 import Modal from "../components/modal";
+import ClienteForm from "../components/ClientesForm";
+import Swal from "sweetalert2";
 
 function Clientes() {
 
@@ -28,14 +30,23 @@ function Clientes() {
   });
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
     setForm({
       ...form,
       [e.target.name]: e.target.value,
+    });
+
+    setErrors({
+      ...errors,
+      [name]: ""
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validar()) return;
 
     try {
       if (editandoId) {
@@ -55,16 +66,45 @@ function Clientes() {
       });
 
       setEditandoId(null);
+      setShowModal(false);
+
+      Swal.fire({
+        icon: "success",
+        title: "Éxito",
+        text: "Cliente guardado correctamente",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
 
     } catch (error) {
-      console.error("Error", error);
+      console.log(error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.message || "Ocurrió un error",
+      });
+
     }
   };
 
-
   const handleEliminar = async (id) => {
-    await eliminarCliente(id);
-    await cargarClientes();
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás revertir esto",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (result.isConfirmed) {
+      await eliminarCliente(id);
+      await cargarClientes();
+
+      Swal.fire("Eliminado", "El cliente fue eliminado", "success");
+    }
   };
 
   const handleEditar = (cliente) => {
@@ -97,7 +137,7 @@ function Clientes() {
 
     if (!form.correo.trim()) {
       nuevosErrores.correo = "El correo es obligatorio";
-    } else if (!/\S+@\S+\.\S+/.test(form.correo)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.correo)) {
       nuevosErrores.correo = "Correo inválido";
     }
 
@@ -133,52 +173,12 @@ function Clientes() {
         onClose={() => setShowModal(false)}
         title="Registrar Cliente"
       >
-        <form onSubmit={handleSubmit}>
-          <input
-            className={`form-control mb-1 ${errors.nombre ? "is-invalid" : ""}`}
-            name="nombre"
-            placeholder="Nombre"
-            value={form.nombre}
-            onChange={handleChange}
-          />
-          {errors.nombre && (
-            <div className="invalid-feedback">
-              {errors.nombre}
-            </div>
-          )}
-          <input className={`form-control mb-1 ${errors.apellidos ? "is-invalid" : ""}`}
-            name="apellidos" placeholder="Apellidos" value={form.apellidos} onChange={handleChange} />
-          {errors.apellidos && (
-            <div className="invalid-feedback">
-              {errors.apellidos}
-            </div>
-          )}
-          <input className={`form-control mb-1 ${errors.nroDocumento ? "is-invalid" : ""}`}
-            name="nroDocumento" placeholder="Documento" value={form.nroDocumento} onChange={handleChange} />
-          {errors.nroDocumento && (
-            <div className="invalid-feedback">
-              {errors.nroDocumento}
-            </div>
-          )}
-          <input className={`form-control mb-1 ${errors.correo ? "is-invalid" : ""}`}
-            name="correo" placeholder="Correo" value={form.correo} onChange={handleChange} />
-          {errors.correo && (
-            <div className="invalid-feedback">
-              {errors.correo}
-            </div>
-          )}
-          <input className={`form-control mb-1 ${errors.telefono ? "is-invalid" : ""}`}
-            name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleChange} />
-          {errors.telefono && (
-            <div className="invalid-feedback">
-              {errors.telefono}
-            </div>
-          )}
-
-          <button className="btn btn-success" type="submit">
-            Guardar
-          </button>
-        </form>
+        <ClienteForm
+          form={form}
+          errors={errors}
+          onChange={handleChange}
+          onSubmit={handleSubmit}
+        />
       </Modal>
     </div>
 
