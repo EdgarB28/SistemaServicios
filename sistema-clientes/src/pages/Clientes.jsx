@@ -4,6 +4,8 @@ import ClienteTable from "../components/ClienteTable";
 import Modal from "../components/modal";
 import ClienteForm from "../components/ClientesForm";
 import Swal from "sweetalert2";
+import Select from "react-select";
+import { FaSearch, FaTimes } from "react-icons/fa";
 
 function Clientes() {
 
@@ -11,6 +13,9 @@ function Clientes() {
   const [showModal, setShowModal] = useState(false);
   const [editandoId, setEditandoId] = useState(null);
   const [errors, setErrors] = useState({});
+  const [inputValue, setInputValue] = useState("");
+  const [busqueda, setBusqueda] = useState("");
+  const [clientesFiltrados, setClientesFiltrados] = useState([]);
 
   useEffect(() => {
     cargarClientes();
@@ -150,21 +155,75 @@ function Clientes() {
     return Object.keys(nuevosErrores).length === 0;
   };
 
+  const opcionesClientes = clientes.map(cliente => ({
+    value: cliente.id,
+    label: `${cliente.nombreCompleto} - ${cliente.nroDocumento}`
+  }));
+
+  useEffect(() => {
+    if (!busqueda) {
+      setClientesFiltrados([]);
+      return;
+    }
+
+    const resultado = clientes.filter(c =>
+      c.nombreCompleto.toLowerCase().includes(busqueda.toLowerCase()) ||
+      c.nroDocumento.includes(busqueda)
+    );
+
+    setClientesFiltrados(resultado);
+  }, [busqueda, clientes]);
+
   return (
     <div>
       <h3 className="text-start">Clientes</h3>
-
-      {/* Fila buscador + botón */}
       <div className="d-flex justify-content-between align-items-center mb-3">
-        {/* Buscador (izquierda) */}
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Buscar..."
-          style={{ width: "300px" }}
-        />
 
-        {/* Botón (derecha) */}
+        <div style={{ position: "relative", width: "350px" }}>
+
+          {/* Icono lupa */}
+          <FaSearch
+            style={{
+              position: "absolute",
+              left: "10px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              color: "#888",
+              zIndex: 1
+            }}
+            onClick={null}
+          />
+
+          <Select
+            options={opcionesClientes}
+            inputValue={inputValue}
+            onInputChange={(value) => {
+              setInputValue(value);
+              setBusqueda(value);
+            }}
+            isSearchable
+            placeholder="Buscar cliente..."
+          />
+
+          {/* Botón limpiar */}
+          <FaTimes
+            style={{
+              position: "absolute",
+              right: "10px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+              color: "#888",
+              zIndex: 1
+            }}
+            onClick={() => {
+              setInputValue("");
+              setBusqueda("");
+              setClientesFiltrados([]);
+            }}
+          />
+        </div>
+
         <button
           type="button"
           className="btn btn-primary"
@@ -181,7 +240,7 @@ function Clientes() {
 
 
       <ClienteTable
-        clientes={clientes}  //datos
+        clientes={clientesFiltrados.length ? clientesFiltrados : clientes}  //datos
         onEliminar={handleEliminar} //funcion
         onEditar={handleEditar} //funcion
       />
@@ -198,7 +257,7 @@ function Clientes() {
           onSubmit={handleSubmit}
         />
       </Modal>
-    </div>
+    </div >
 
 
 
