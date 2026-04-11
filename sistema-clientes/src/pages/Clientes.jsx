@@ -16,6 +16,7 @@ function Clientes() {
   const [inputValue, setInputValue] = useState("");
   const [busqueda, setBusqueda] = useState("");
   const [clientesFiltrados, setClientesFiltrados] = useState([]);
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
 
   useEffect(() => {
     cargarClientes();
@@ -93,6 +94,20 @@ function Clientes() {
 
     }
   };
+  
+  const handleCrearCliente = () => {
+  setForm({
+    nombre: "",
+    apellidos: "",
+    nroDocumento: "",
+    correo: "",
+    telefono: "",
+  });
+
+  setEditandoId(null);
+  setErrors({});
+  setShowModal(true);
+};
 
   const handleEliminar = async (id) => {
     const result = await Swal.fire({
@@ -180,54 +195,34 @@ function Clientes() {
       <div className="d-flex justify-content-between align-items-center mb-3">
 
         <div style={{ position: "relative", width: "350px" }}>
-
-          {/* Icono lupa */}
-          <FaSearch
-            style={{
-              position: "absolute",
-              left: "10px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              color: "#888",
-              zIndex: 1
-            }}
-            onClick={null}
-          />
-
+ 
           <Select
             options={opcionesClientes}
             inputValue={inputValue}
             onInputChange={(value) => {
-              setInputValue(value);
-              setBusqueda(value);
+              setInputValue(value); 
+            }}
+            onChange={(option) => {
+              setClienteSeleccionado(option);
+
+              if (option) {
+                const cliente = clientes.find(c => c.id === option.value);
+                setClientesFiltrados([cliente]);
+              } else {
+                setClientesFiltrados([]);
+              }
             }}
             isSearchable
+            isClearable
             placeholder="Buscar cliente..."
           />
-
-          {/* Botón limpiar */}
-          <FaTimes
-            style={{
-              position: "absolute",
-              right: "10px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              cursor: "pointer",
-              color: "#888",
-              zIndex: 1
-            }}
-            onClick={() => {
-              setInputValue("");
-              setBusqueda("");
-              setClientesFiltrados([]);
-            }}
-          />
+ 
         </div>
 
         <button
           type="button"
           className="btn btn-primary"
-          onClick={() => setShowModal(true)}
+          onClick={handleCrearCliente}
         >
           Crear Cliente
         </button>
