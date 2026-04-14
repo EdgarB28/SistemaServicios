@@ -2,7 +2,7 @@ package com.example.sistema_servicios.dto;
 import lombok.Data;
 
 @Data
-public class ClienteResponseDTO {
+public class  ClienteResponseDTO {
     private Long id;
     private String nombreCompleto;
     private String nroDocumento;

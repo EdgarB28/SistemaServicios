@@ -4,7 +4,6 @@ import com.example.sistema_servicios.dto.ClienteResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 public interface ClienteService {
 
     ClienteResponseDTO buscarPorId(Long id);
