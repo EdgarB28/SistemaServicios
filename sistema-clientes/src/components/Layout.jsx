@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Clientes from "../pages/Clientes";
+import Productos from "../pages/Productos";
 import Bienvenido from "../pages/Bienvenido";
 import "../styles/sidebar.css";
 
@@ -13,7 +14,7 @@ function Layout() {
             case "clientes":
                 return <Clientes/>;
             case "productos":
-                return <h2>Productos (en construcción)</h2>;
+                return <Productos/>;
             case "ventas":
                 return <h2>Ventas (en construcción)</h2>;
             default:

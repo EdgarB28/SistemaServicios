@@ -5,7 +5,6 @@ import Modal from "../components/modal";
 import ClienteForm from "../components/ClientesForm";
 import Swal from "sweetalert2";
 import Select from "react-select";
-import { FaSearch, FaTimes } from "react-icons/fa";
 
 function Clientes() {
 

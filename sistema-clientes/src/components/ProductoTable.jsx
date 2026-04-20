@@ -1,0 +1,46 @@
+function ProductoTable({ productos, onEliminar, onEditar }) {
+    return (
+        <table className="table table-striped table-hover">
+            <thead className="table-dark">
+                <tr>
+                    <th>Descripcion</th>
+                    <th>cantidad</th>
+                    <th>precio</th>
+                    <th>estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {productos.map(producto => (
+                    <tr key={producto.idProducto}>
+                        <td>{producto.descripcion}</td>
+                        <td>{producto.cantidad}</td>
+                        <td>{producto.precio}</td>
+                        <td>{producto.estado}</td>
+                        <td>
+                            <button
+                                className="btn btn-danger btn-sm me-2"
+                                onClick={() => onEliminar(producto.idProducto)}
+                            >
+                                Eliminar
+                            </button>
+
+                            <button
+                                className="btn btn-warning btn-sm"
+                                onClick={() => onEditar(producto)}
+                            >
+                                Editar
+                            </button>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+
+        </table>
+
+    );
+
+}
+
+export default ProductoTable;
