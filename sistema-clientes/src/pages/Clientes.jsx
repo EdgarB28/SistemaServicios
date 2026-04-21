@@ -93,20 +93,20 @@ function Clientes() {
 
     }
   };
-  
-  const handleCrearCliente = () => {
-  setForm({
-    nombre: "",
-    apellidos: "",
-    nroDocumento: "",
-    correo: "",
-    telefono: "",
-  });
 
-  setEditandoId(null);
-  setErrors({});
-  setShowModal(true);
-};
+  const handleCrearCliente = () => {
+    setForm({
+      nombre: "",
+      apellidos: "",
+      nroDocumento: "",
+      correo: "",
+      telefono: "",
+    });
+
+    setEditandoId(null);
+    setErrors({});
+    setShowModal(true);
+  };
 
   const handleEliminar = async (id) => {
     const result = await Swal.fire({
@@ -194,12 +194,12 @@ function Clientes() {
       <div className="d-flex justify-content-between align-items-center mb-3">
 
         <div style={{ position: "relative", width: "350px" }}>
- 
+
           <Select
             options={opcionesClientes}
             inputValue={inputValue}
             onInputChange={(value) => {
-              setInputValue(value); 
+              setInputValue(value);
             }}
             onChange={(option) => {
               setClienteSeleccionado(option);
@@ -215,7 +215,7 @@ function Clientes() {
             isClearable
             placeholder="Buscar cliente..."
           />
- 
+
         </div>
 
         <button

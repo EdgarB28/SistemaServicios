@@ -1,4 +1,6 @@
 function ProductoTable({ productos, onEliminar, onEditar }) {
+    const listaProductos = Array.isArray(productos) ? productos : [];
+
     return (
         <table className="table table-striped table-hover">
             <thead className="table-dark">
@@ -12,7 +14,7 @@ function ProductoTable({ productos, onEliminar, onEditar }) {
             </thead>
 
             <tbody>
-                {productos.map(producto => (
+                {listaProductos.map(producto => (
                     <tr key={producto.idProducto}>
                         <td>{producto.descripcion}</td>
                         <td>{producto.cantidad}</td>
