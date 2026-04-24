@@ -19,13 +19,13 @@ public class Productos {
     @Column(nullable = false, length = 150)
     private String descripcion;
 
-    @Column(length = 150)
+    @Column(nullable = false)
     private Integer  cantidad;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
-    @Column(nullable = false)
+    @Column
     private Integer estado = 1;
 
     @Column(name = "u_creacion", length = 150)

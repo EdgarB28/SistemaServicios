@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { listarProductos, crearProducto, eliminarProducto, actualizarProducto } from "../services/productoService";
 import ProductoTable from "../components/ProductoTable";
 import Swal from "sweetalert2";
+import Modal from "../components/modal";
+import ProductoForm from "../components/ProductosForm";
 
 function Productos() {
     const [productos, setProductos] = useState([]);
@@ -23,8 +25,7 @@ function Productos() {
     const [form, setForm] = useState({
         descripcion: "",
         cantidad: "",
-        precio: "",
-        estado: ""
+        precio: ""
     });
 
     const handleChange = (e) => {
@@ -32,7 +33,12 @@ function Productos() {
 
         setForm({
             ...form,
-            [e.target.name]: e.target.value,
+            [name]:
+                name === "cantidad"
+                    ? parseInt(value) || ""
+                    : name === "precio"
+                        ? parseFloat(value) || ""
+                        : value,
         });
 
         setErrors({
@@ -58,8 +64,7 @@ function Productos() {
             setForm({
                 descripcion: "",
                 cantidad: "",
-                precio: "",
-                estado: ""
+                precio: ""
             });
 
             setEditandoId(null);
@@ -90,8 +95,7 @@ function Productos() {
         setForm({
             descripcion: "",
             cantidad: "",
-            precio: "",
-            estado: ""
+            precio: ""
         });
 
         setEditandoId(null);
@@ -136,22 +140,26 @@ function Productos() {
             nuevosErrores.descripcion = "Colocar el nombre del producto";
         }
 
-        if (!form.cantidad.trim()) {
-            nuevosErrores.apellidos = "Colocar la cantidad";
+        if (form.cantidad === "" || form.cantidad === null) {
+            nuevosErrores.cantidad = "Colocar la cantidad";
+        } else if (form.cantidad <= 0) {
+            nuevosErrores.cantidad = "La cantidad debe ser mayor a 0";
         }
 
-        if (!form.precio.trim()) {
-            nuevosErrores.nroDocumento = "Colocar el precio";
+        if (form.precio === "" || form.precio === null) {
+            nuevosErrores.precio = "Colocar el precio";
+        } else if (form.precio <= 0) {
+            nuevosErrores.precio = "El precio debe ser mayor a 0";
         }
         setErrors(nuevosErrores);
 
         return Object.keys(nuevosErrores).length === 0;
     };
 
-  /* const opcionesProductos = productos.map(producto => ({
-        value: producto.id,
-        label: producto.descripcion
-    }));*/
+    /* const opcionesProductos = productos.map(producto => ({
+          value: producto.id,
+          label: producto.descripcion
+      }));*/
 
     useEffect(() => {
         if (!busqueda) {
@@ -160,7 +168,7 @@ function Productos() {
         }
 
         const resultado = productos.filter(c =>
-            c.descripcion.toLowerCase().includes(busqueda.toLowerCase())  
+            c.descripcion.toLowerCase().includes(busqueda.toLowerCase())
         );
 
         setProductosFiltrados(resultado);
@@ -171,7 +179,13 @@ function Productos() {
             <h3 className="text-start">Productos</h3>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <div style={{ position: "relative", width: "350px" }}>
-
+                    <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={handleCrearProducto}
+                    >
+                        Crear Producto
+                    </button>
                 </div>
             </div>
 
@@ -184,6 +198,20 @@ function Productos() {
                 onEliminar={handleEliminar} //funcion
                 onEditar={handleEditar} //funcion
             />
+
+
+            <Modal
+                show={showModal}
+                onClose={() => setShowModal(false)}
+                title="Registrar Cliente"
+            >
+                <ProductoForm
+                    form={form}
+                    errors={errors}
+                    onChange={handleChange}
+                    onSubmit={handleSubmit}
+                />
+            </Modal>
 
         </div>
 
