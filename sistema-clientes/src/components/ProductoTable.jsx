@@ -1,5 +1,6 @@
 function ProductoTable({ productos, onEliminar, onEditar }) {
     const listaProductos = Array.isArray(productos) ? productos : [];
+ 
 
     return (
         <table className="table table-striped table-hover">
@@ -14,29 +15,37 @@ function ProductoTable({ productos, onEliminar, onEditar }) {
             </thead>
 
             <tbody>
-                {listaProductos.map(producto => (
-                    <tr key={producto.idProducto}>
-                        <td>{producto.descripcion}</td>
-                        <td>{producto.cantidad}</td>
-                        <td>{producto.precio}</td>
-                        <td>{producto.estado}</td>
-                        <td>
-                            <button
-                                className="btn btn-danger btn-sm me-2"
-                                onClick={() => onEliminar(producto.idProducto)}
-                            >
-                                Eliminar
-                            </button>
+                {listaProductos.map(producto => {
+                    const estaActivo = Number(producto.estado) === 1;
 
-                            <button
-                                className="btn btn-warning btn-sm"
-                                onClick={() => onEditar(producto)}
-                            >
-                                Editar
-                            </button>
-                        </td>
-                    </tr>
-                ))}
+                    return (
+                        <tr key={producto.idProducto}>
+                            <td>{producto.descripcion}</td>
+                            <td>{producto.cantidad}</td>
+                            <td>{producto.precio}</td>
+                            <td>
+                                <span className={`badge ${estaActivo ? "bg-success" : "bg-danger"}`}>
+                                    {estaActivo ? "Activo" : "Eliminado"}
+                                </span>
+                            </td>
+                            <td>
+                                <button
+                                    className="btn btn-danger btn-sm me-2"
+                                    onClick={() => onEliminar(producto)}
+                                >
+                                    Eliminar
+                                </button>
+
+                                <button
+                                    className="btn btn-warning btn-sm"
+                                    onClick={() => onEditar(producto)}
+                                >
+                                    Editar
+                                </button>
+                            </td>
+                        </tr>
+                    );
+                })}
             </tbody>
 
         </table>

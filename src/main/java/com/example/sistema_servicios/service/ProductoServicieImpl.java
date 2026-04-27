@@ -58,7 +58,7 @@ public class ProductoServicieImpl implements  ProductoService{
 
     @Override
     public Page<ProductoResponseDTO> listarPaginado(Pageable pageable) {
-        return productosRepository.findByEstado(1, pageable)
+        return productosRepository.findAll(pageable)
                 .map(this::mapToResponse);
     }
 
@@ -83,3 +83,4 @@ public class ProductoServicieImpl implements  ProductoService{
     }
 
 }
+

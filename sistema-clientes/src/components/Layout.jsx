@@ -1,63 +1,66 @@
-import { useState } from "react";
-import Clientes from "../pages/Clientes";
-import Productos from "../pages/Productos";
-import Bienvenido from "../pages/Bienvenido";
+import { useEffect, useState } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import "../styles/sidebar.css";
 
 function Layout() {
-    const [vista, setVista] = useState("inicio");
+    const location = useLocation();
+    const esRutaProductos = location.pathname.startsWith("/productos");
+    const [mostrarSubmenuProductos, setMostrarSubmenuProductos] = useState(esRutaProductos);
 
-    const renderVista = () => {
-        switch (vista) {
-            case "inicio":
-                return <Bienvenido/>;
-            case "clientes":
-                return <Clientes/>;
-            case "productos":
-                return <Productos/>;
-            case "ventas":
-                return <h2>Ventas (en construcción)</h2>;
-            default:
-                return <h2>Bienvenido</h2>;
+    useEffect(() => {
+        if (esRutaProductos) {
+            setMostrarSubmenuProductos(true);
         }
-    };
+    }, [esRutaProductos]);
+
+    const obtenerClaseLink = ({ isActive }) =>
+        `sidebar-button ${isActive ? "sidebar-button-active" : ""}`;
+
+    const obtenerClaseSubmenu = ({ isActive }) =>
+        `sidebar-submenu-button ${isActive ? "sidebar-button-active" : ""}`;
 
     return (
-        <div style={{ display: "flex", height: "100vh" }}>
+        <div className="app-layout">
+            <aside className="sidebar">
+                <NavLink to="/" end className="sidebar-title">
+                    Menu
+                </NavLink>
 
-            {/* Sidebar */}
-            <div style={{
-                width: "150px",
-                background: "#2c3e50",
-                color: "white",
-                padding: "20px"
-            }}>
-                <h3
-                    onClick={() => setVista("inicio")}
-                    style={{ cursor: "pointer" }}
-                >
-                    Menú
-                </h3>
+                <NavLink to="/clientes" className={obtenerClaseLink}>
+                    Clientes
+                </NavLink>
 
                 <button
-                    className="sidebar-button"
-                    onClick={() => setVista("clientes")}
+                    type="button"
+                    className={`sidebar-button ${esRutaProductos ? "sidebar-button-active" : ""}`}
+                    onClick={() => setMostrarSubmenuProductos((valorActual) => !valorActual)}
                 >
-                    Clientes
+                    <span>Productos</span>
+                    <span>{mostrarSubmenuProductos ? "-" : "+"}</span>
                 </button>
-                <br /><br /> 
 
-                <button className="sidebar-button" onClick={() => setVista("productos")}>Productos</button>
-                <br /><br />
+                {mostrarSubmenuProductos && (
+                    <div className="sidebar-submenu">
+                        <NavLink to="/productos" end className={obtenerClaseSubmenu}>
+                            Todos
+                        </NavLink>
+                        <NavLink to="/productos/activos" className={obtenerClaseSubmenu}>
+                            Activos
+                        </NavLink>
+                        <NavLink to="/productos/eliminados" className={obtenerClaseSubmenu}>
+                            Eliminados
+                        </NavLink>
+                    </div>
+                )}
 
-                <button className="sidebar-button" onClick={() => setVista("ventas")}>Ventas</button>
-            </div>
+                <NavLink to="/ventas" className={obtenerClaseLink}>
+                    Ventas
+                </NavLink>
+            </aside>
 
-            {/* Contenido */}
-            <div style={{ flex: 1, padding: "20px" }}>
-                {renderVista()}
-            </div>
-
+            <main className="layout-content">
+                <Outlet />
+            </main>
         </div>
     );
 }

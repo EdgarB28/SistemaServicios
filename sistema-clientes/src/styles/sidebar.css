@@ -1,13 +1,81 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  padding: 20px;
+  background: #2c3e50;
+  color: white;
+}
+
+.sidebar-title {
+  display: block;
+  margin-bottom: 24px;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.layout-content {
+  flex: 1;
+  padding: 20px;
+  overflow: auto;
+}
+
 .sidebar-button {
   width: 100%;
-  padding: 10px;
+  padding: 10px 12px;
   margin-bottom: 10px;
   background: #2c3e50;
   color: white;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  font: inherit;
+  transition: background-color 0.2s ease;
 }
 
 .sidebar-button:hover {
   background: #1abc9c;
+  color: white;
+}
+
+.sidebar-button-active {
+  background: #1abc9c;
+  color: white;
+}
+
+.sidebar-submenu {
+  margin-top: -4px;
+  margin-bottom: 16px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.sidebar-submenu-button {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  background: #34495e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-submenu-button:hover {
+  background: #16a085;
+  color: white;
 }

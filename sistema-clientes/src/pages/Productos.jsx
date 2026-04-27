@@ -5,13 +5,31 @@ import Swal from "sweetalert2";
 import Modal from "../components/modal";
 import ProductoForm from "../components/ProductosForm";
 
-function Productos() {
+function Productos({ filtroEstado = "todos" }) {
     const [productos, setProductos] = useState([]);
     const [productosFiltrados, setProductosFiltrados] = useState([]);
     const [editandoId, setEditandoId] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState({});
     const [busqueda, setBusqueda] = useState("");
+    const productoEstaActivo = (estado) => Number(estado) === 1;
+    const filtrarProductosPorEstado = (listaProductos) => {
+        if (filtroEstado === "activos") {
+            return listaProductos.filter(producto => productoEstaActivo(producto.estado));
+        }
+
+        if (filtroEstado === "eliminados") {
+            return listaProductos.filter(producto => !productoEstaActivo(producto.estado));
+        }
+
+        return listaProductos;
+    };
+
+    const tituloProductos = filtroEstado === "activos"
+        ? "Productos activos"
+        : filtroEstado === "eliminados"
+            ? "Productos eliminados"
+            : "Productos";
 
     useEffect(() => {
         cargarProductos();
@@ -73,7 +91,7 @@ function Productos() {
             Swal.fire({
                 icon: "success",
                 title: "Éxito",
-                text: "Produucto guardado correctamente",
+                text: "Producto guardado correctamente",
                 timer: 2000,
                 showConfirmButton: false,
             });
@@ -103,7 +121,16 @@ function Productos() {
         setShowModal(true);
     };
 
-    const handleEliminar = async (id) => {
+    const handleEliminar = async (producto) => {
+        if (!productoEstaActivo(producto.estado)) {
+            Swal.fire({
+                icon: "info",
+                title: "Producto eliminado",
+                text: "Este producto ya esta eliminado",
+            });
+            return;
+        }
+
         const result = await Swal.fire({
             title: "¿Estás seguro?",
             text: "No podrás revertir esto",
@@ -114,7 +141,7 @@ function Productos() {
         });
 
         if (result.isConfirmed) {
-            await eliminarProducto(id);
+            await eliminarProducto(producto.idProducto);
             await cargarProductos();
 
             Swal.fire("Eliminado", "El Producto fue eliminado", "success");
@@ -122,6 +149,15 @@ function Productos() {
     };
 
     const handleEditar = (producto) => {
+        if (!productoEstaActivo(producto.estado)) {
+            Swal.fire({
+                icon: "info",
+                title: "Producto eliminado",
+                text: "Este producto ya esta eliminado",
+            });
+            return;
+        }
+
         setForm({
             descripcion: producto.descripcion,
             cantidad: producto.cantidad,
@@ -162,21 +198,23 @@ function Productos() {
       }));*/
 
     useEffect(() => {
+        const productosBase = filtrarProductosPorEstado(productos);
+
         if (!busqueda) {
             setProductosFiltrados([]);
             return;
         }
 
-        const resultado = productos.filter(c =>
+        const resultado = productosBase.filter(c =>
             c.descripcion.toLowerCase().includes(busqueda.toLowerCase())
         );
 
         setProductosFiltrados(resultado);
-    }, [busqueda, productos]);
+    }, [busqueda, productos, filtroEstado]);
 
     return (
         <div>
-            <h3 className="text-start">Productos</h3>
+            <h3 className="text-start">{tituloProductos}</h3>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <div style={{ position: "relative", width: "350px" }}>
                     <button
@@ -194,7 +232,7 @@ function Productos() {
             <h5 className="text-start">Lista de Productos</h5>
 
             <ProductoTable
-                productos={productosFiltrados.length ? productosFiltrados : productos}  //datos
+                productos={busqueda ? productosFiltrados : filtrarProductosPorEstado(productos)}  //datos
                 onEliminar={handleEliminar} //funcion
                 onEditar={handleEditar} //funcion
             />
@@ -203,7 +241,7 @@ function Productos() {
             <Modal
                 show={showModal}
                 onClose={() => setShowModal(false)}
-                title="Registrar Cliente"
+                title="Registrar Producto"
             >
                 <ProductoForm
                     form={form}
