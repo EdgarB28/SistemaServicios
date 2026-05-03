@@ -1,7 +1,7 @@
-package com.example.sistema_servicios.service;
+package com.example.sistema_servicios.service.cliente;
 
-import com.example.sistema_servicios.dto.ClienteRequestDTO;
-import com.example.sistema_servicios.dto.ClienteResponseDTO;
+import com.example.sistema_servicios.dto.cliente.ClienteRequestDTO;
+import com.example.sistema_servicios.dto.cliente.ClienteResponseDTO;
 import com.example.sistema_servicios.entity.Cliente;
 import com.example.sistema_servicios.exception.ConflictException;
 import com.example.sistema_servicios.exception.ResourceNotFoundException;

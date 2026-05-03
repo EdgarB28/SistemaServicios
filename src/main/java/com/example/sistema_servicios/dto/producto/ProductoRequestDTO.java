@@ -1,4 +1,4 @@
-package com.example.sistema_servicios.dto;
+package com.example.sistema_servicios.dto.producto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,6 +1,6 @@
-package com.example.sistema_servicios.service;
-import com.example.sistema_servicios.dto.ClienteRequestDTO;
-import com.example.sistema_servicios.dto.ClienteResponseDTO;
+package com.example.sistema_servicios.service.cliente;
+import com.example.sistema_servicios.dto.cliente.ClienteRequestDTO;
+import com.example.sistema_servicios.dto.cliente.ClienteResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,7 +1,7 @@
 package com.example.sistema_servicios.controller;
-import com.example.sistema_servicios.dto.ProductoRequestDTO;
-import com.example.sistema_servicios.dto.ProductoResponseDTO;
-import com.example.sistema_servicios.service.ProductoService;
+import com.example.sistema_servicios.dto.producto.ProductoRequestDTO;
+import com.example.sistema_servicios.dto.producto.ProductoResponseDTO;
+import com.example.sistema_servicios.service.producto.ProductoService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;

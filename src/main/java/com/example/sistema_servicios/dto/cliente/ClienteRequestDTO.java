@@ -1,4 +1,4 @@
-package com.example.sistema_servicios.dto;
+package com.example.sistema_servicios.dto.cliente;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

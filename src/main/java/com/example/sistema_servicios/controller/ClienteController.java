@@ -1,9 +1,9 @@
 package com.example.sistema_servicios.controller;
 
 
-import com.example.sistema_servicios.dto.ClienteRequestDTO;
-import com.example.sistema_servicios.dto.ClienteResponseDTO;
-import com.example.sistema_servicios.service.ClienteService;
+import com.example.sistema_servicios.dto.cliente.ClienteRequestDTO;
+import com.example.sistema_servicios.dto.cliente.ClienteResponseDTO;
+import com.example.sistema_servicios.service.cliente.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;

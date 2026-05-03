@@ -1,8 +1,7 @@
-package com.example.sistema_servicios.service;
+package com.example.sistema_servicios.service.producto;
 
-import com.example.sistema_servicios.dto.ClienteRequestDTO;
-import com.example.sistema_servicios.dto.ProductoRequestDTO;
-import com.example.sistema_servicios.dto.ProductoResponseDTO;
+import com.example.sistema_servicios.dto.producto.ProductoRequestDTO;
+import com.example.sistema_servicios.dto.producto.ProductoResponseDTO;
 import com.example.sistema_servicios.entity.Productos;
 import com.example.sistema_servicios.exception.ResourceNotFoundException;
 import com.example.sistema_servicios.repository.ProductosRepository;
@@ -11,10 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProductoServicieImpl implements  ProductoService{
+public class ProductoServiceImpl implements  ProductoService{
     private final ProductosRepository productosRepository;
 
-    public ProductoServicieImpl(ProductosRepository productosRepository) {
+    public ProductoServiceImpl(ProductosRepository productosRepository) {
         this.productosRepository = productosRepository;
     }
 
